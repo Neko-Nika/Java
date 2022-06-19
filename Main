@@ -1,0 +1,36 @@
+package com.company;
+ 
+import org.json.JSONException;
+import java.io.IOException;
+ 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+ 
+public class Main {
+ 
+    public static void main(String[] args) {
+        System.out.println("Enter the desired topic name");
+ 
+        Scanner scanner = new Scanner(System.in);
+        String input = preprocess(scanner.nextLine());
+ 
+        Parser parser = new Parser();
+ 
+        try {
+            System.out.println(parser.parse(input));
+        } catch (IOException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    public static String preprocess(String initial) {
+        List<String> words = new ArrayList<String>();
+        for (String word : initial.split(" ")) {
+             words.add(Character.toUpperCase(word.charAt(0)) + word.substring(1));
+        }
+ 
+        return String.join("_", words);
+    }
+}
