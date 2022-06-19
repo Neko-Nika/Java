@@ -1,0 +1,30 @@
+package com.company;
+ 
+ 
+import org.json.JSONException;
+import org.json.JSONObject;
+ 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+ 
+public class Parser {
+    private final String source = "https://en.wikipedia.org/api/rest_v1/page/summary/";
+    private final HttpClient client = HttpClient.newHttpClient();
+ 
+    public String parse(String topic) throws IOException, InterruptedException, JSONException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(this.source + topic))
+                .build();
+ 
+        HttpResponse<String> response = this.client.send(request, HttpResponse.BodyHandlers.ofString());
+ 
+        JSONObject object = new JSONObject(response.body());
+ 
+        return (String) object.get("extract");
+    }
+}
